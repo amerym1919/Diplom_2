@@ -11,6 +11,8 @@ import stellarburgers.client.UserClient;
 import stellarburgers.generator.UserGenerator;
 import stellarburgers.model.User;
 
+import static org.apache.http.HttpStatus.SC_FORBIDDEN;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -34,7 +36,7 @@ public class UserCreateTest {
         accessToken = response.path("accessToken");
 
         response.then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("success", equalTo(true))
                 .body("user.email", equalTo(user.getEmail()))
                 .body("user.name", equalTo(user.getName()))
@@ -51,14 +53,14 @@ public class UserCreateTest {
         Response firstResponse = userClient.createUser(user);
 
         firstResponse.then()
-                .statusCode(200);
+                .statusCode(SC_OK);
 
         accessToken = firstResponse.path("accessToken");
 
         Response secondResponse = userClient.createUser(user);
 
         secondResponse.then()
-                .statusCode(403)
+                .statusCode(SC_FORBIDDEN)
                 .body("success", equalTo(false))
                 .body("message", equalTo("User already exists"));
     }
@@ -77,7 +79,7 @@ public class UserCreateTest {
 
         userClient.createUser(user)
                 .then()
-                .statusCode(403)
+                .statusCode(SC_FORBIDDEN)
                 .body("success", equalTo(false))
                 .body(
                         "message",
@@ -99,7 +101,7 @@ public class UserCreateTest {
 
         userClient.createUser(user)
                 .then()
-                .statusCode(403)
+                .statusCode(SC_FORBIDDEN)
                 .body("success", equalTo(false))
                 .body(
                         "message",
@@ -121,7 +123,7 @@ public class UserCreateTest {
 
         userClient.createUser(user)
                 .then()
-                .statusCode(403)
+                .statusCode(SC_FORBIDDEN)
                 .body("success", equalTo(false))
                 .body(
                         "message",

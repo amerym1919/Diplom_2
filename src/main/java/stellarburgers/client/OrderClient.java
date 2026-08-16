@@ -2,9 +2,11 @@ package stellarburgers.client;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import stellarburgers.model.Order;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.apache.http.HttpStatus.SC_OK;
 
 public class OrderClient extends BaseClient {
 
@@ -19,7 +21,7 @@ public class OrderClient extends BaseClient {
     public List<String> getIngredientIds() {
         return getIngredients()
                 .then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .extract()
                 .jsonPath()
                 .getList("data._id");
@@ -32,14 +34,10 @@ public class OrderClient extends BaseClient {
             specification.header("Authorization", accessToken);
         }
 
-        String ingredientList = ingredients.stream()
-                .map(ingredient -> "\"" + ingredient + "\"")
-                .collect(Collectors.joining(","));
-
-        String json = "{\"ingredients\":[" + ingredientList + "]}";
+        Order order = new Order(ingredients);
 
         return specification
-                .body(json)
+                .body(order)
                 .post(ORDERS_PATH);
     }
 }

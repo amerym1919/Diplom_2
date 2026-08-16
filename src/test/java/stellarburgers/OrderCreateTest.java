@@ -14,6 +14,9 @@ import stellarburgers.model.User;
 import java.util.Collections;
 import java.util.List;
 
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -47,7 +50,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("success", equalTo(true))
                 .body("order.number", notNullValue());
     }
@@ -64,7 +67,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("success", equalTo(false))
                 .body(
                         "message",
@@ -84,7 +87,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(500);
+                .statusCode(SC_INTERNAL_SERVER_ERROR);
 
         org.junit.Assert.assertFalse(
                 response.getBody().asString().isEmpty()
@@ -103,7 +106,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("success", equalTo(true))
                 .body("order.number", notNullValue());
     }
@@ -118,7 +121,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("success", equalTo(false))
                 .body(
                         "message",
@@ -136,7 +139,7 @@ public class OrderCreateTest {
         );
 
         response.then()
-                .statusCode(500);
+                .statusCode(SC_INTERNAL_SERVER_ERROR);
 
         org.junit.Assert.assertFalse(
                 response.getBody().asString().isEmpty()
@@ -149,7 +152,7 @@ public class OrderCreateTest {
         Response response = userClient.createUser(user);
 
         response.then()
-                .statusCode(200);
+                .statusCode(SC_OK);
 
         accessToken = response.path("accessToken");
     }
